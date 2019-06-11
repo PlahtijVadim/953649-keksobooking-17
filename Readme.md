@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Вадим Плахтий](https://up.htmlacademy.ru/javascript/17/user/953649).
-* Наставник: `Неизвестно`.
+* Наставник: [Игорь Тараканов](https://htmlacademy.ru/profile/id487569).
 
 ---
 
