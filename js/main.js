@@ -32,15 +32,30 @@ for (var i = 1; i <= 8; i++) {
 
 // [1,2,3,4,5,6,7,8];
 
-//убериам класс .map--faded.
-var mapAd = document.querySelectorAll('.map');
-mapAd.classList.remove('.map--faded');
+//находим блок .map и убериам класс .map--faded
+var map = document.querySelector('.map');
+map.classList.remove('map--faded');
 
 //создаем DOM-элементы и заполняем их
-var pools = document.querySelector('#pin');
-var template = document.querySelector('#element-template').content.querySelector('#pin');
+var renderPin = function (pin) {
+  var pinElement = similarPin.cloneNode(true);
 
-for (var i = 1; i <= 8; i++) {
-  var element = template.cloneNode(true);
+  pinElement.style.left = pin.location.x + 'px';
+  pinElement.style.top = pin.location.y + 'px';
+  pinElement.querySelector('img').src = pin.autor.avatar;
+  pinElement.querySelector('img').alt = 'заголовок объявления';
 
-}
+  return pinElement;
+};
+
+var similarListElement = document.querySelector('.map-pins');
+
+var joinAd = function (ads) {
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < ads.length; i++) {
+    fragment.appendChild(renderPin(ads[i]));
+
+  };
+  similarListElement.appendChild(fragment);
+};
