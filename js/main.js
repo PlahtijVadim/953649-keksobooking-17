@@ -42,13 +42,17 @@ var renderPin = function (pin) {
 
   pinElement.style.left = pin.location.x + 'px';
   pinElement.style.top = pin.location.y + 'px';
-  pinElement.querySelector('img').src = pin.autor.avatar;
+  pinElement.querySelector('img').src = pin.author.avatar;
   pinElement.querySelector('img').alt = 'заголовок объявления';
 
   return pinElement;
 };
 
-var similarListElement = document.querySelector('.map-pins');
+var similarListElement = document.querySelector('.map__pins');
+
+var similarPin = document.querySelector('#pin')
+  .content
+  .querySelector('.map__pin');
 
 var joinAd = function (ads) {
   var fragment = document.createDocumentFragment();
@@ -59,3 +63,5 @@ var joinAd = function (ads) {
   };
   similarListElement.appendChild(fragment);
 };
+
+joinAd(array);
