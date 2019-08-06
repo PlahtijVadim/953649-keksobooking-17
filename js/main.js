@@ -32,10 +32,6 @@ for (var i = 1; i <= 8; i++) {
 
 // [1,2,3,4,5,6,7,8];
 
-//находим блок .map и убериам класс .map--faded
-var map = document.querySelector('.map');
-map.classList.remove('map--faded');
-
 //создаем DOM-элементы и заполняем их
 var renderPin = function (pin) {
   var pinElement = similarPin.cloneNode(true);
@@ -64,4 +60,52 @@ var joinAd = function (ads) {
   similarListElement.appendChild(fragment);
 };
 
-joinAd(array);
+// добавляем  fieldset класс disabled
+var adForm = document.querySelector('.ad-form')
+var mapFilters = document.querySelector('.map__filters');
+
+var fieldsetCount = 12;
+var map = document.querySelector('.map');
+
+function disableForm(fieldsetCount) {
+  for (var i = 0; i < fieldsetCount; i++) {
+    adForm.querySelectorAll('fieldset')[i]
+    .setAttribute('disabled', 'disabled');
+  };
+};
+
+disableForm(fieldsetCount);
+
+// активация формы
+function activeForm(fieldsetCount) {
+  for (var i = 0; i < fieldsetCount; i++) {
+    adForm.querySelectorAll('fieldset')[i]
+    .removeAttribute('disabled');
+  };
+};
+
+// добавляем активацию страницы
+var mapPinMain = document.querySelector('.map__pin--main');
+
+var addressCoordinates = adForm.querySelector('#address');
+var mainPinHeight = 62;
+var mainPointerHeight = 22;
+
+//добавляем координаты в адрес
+function addAddress(input) {
+  var left = parseInt(getComputedStyle(mapPinMain)
+  .getPropertyValue('left'), 10);
+  var top = parseInt(getComputedStyle(mapPinMain)
+  .getPropertyValue('top'), 10);
+  input.setAttribute('value', 'x: ' + left + ' y: '
+  + (top + mainPinHeight / 2 + mainPointerHeight));
+};
+
+// активация карты по клику
+mapPinMain.addEventListener('click', function () {
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  joinAd(array);
+  activeForm(fieldsetCount);
+  addAddress(addressCoordinates);
+});
