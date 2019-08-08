@@ -1,11 +1,15 @@
-// валидация
+'use strict';
+// types стал TYPES и переехал в constants
+// про prices ничего не сказано, но с prices была дилемма - из-за прошлого замечания про маг. числа он выглядит так,
+// но по сути является конст. массивом (поэтому все-таки ставлю заглавные буквы)
+
+(function () {
   var minPrice = {
     'bungalo': 0,
     'flat': 1000,
     'house': 5000,
     'palace': 10000
   };
-
   var capacityMapping = {
     '1': {
       value: 1,
@@ -24,26 +28,21 @@
       items: [3]
     }
   };
+  var PRICES = [window.constants.MIN_FLAT_PRICE, window.constants.MIN_BUNGALO_PRICE, window.constants.MIN_HOUSE_PRICE, window.constants.MIN_PALACE_PRICE];
+  var timein = window.elements.mapForm.querySelector('#timein');
+  var timeout = window.elements.mapForm.querySelector('#timeout');
+  var price = window.elements.mapForm.querySelector('#price');
+  var title = window.elements.mapForm.querySelector('#title');
+  var type = window.elements.mapForm.querySelector('#type');
+  var room = window.elements.mapForm.querySelector('#room_number');
+  var capacity = window.elements.mapForm.querySelector('#capacity');
+  var submit = window.elements.mapForm.querySelector('.ad-form__submit');
+  var reset = window.elements.mapForm.querySelector('.ad-form__reset');
+  var address = window.elements.mapForm.querySelector('#address');
+  var allInputs = window.elements.mapForm.querySelectorAll('input');
+  var errorCount = 0; // счетчик ошибок
 
-  var minFlatPrice = 1000;
-  var minBungaloPrice = 0;
-  var minHousePrice = 5000;
-  var minPalacePrice = 10000;
-
-  var prices = [minFlatPrice, minBungaloPrice, minHousePrice, minPalacePrice];
-  var timein = adForm.querySelector('#timein');
-  var timeout = adForm.querySelector('#timeout');
-  var price = adForm.querySelector('#price');
-  var title = adForm.querySelector('#title');
-  var type = adForm.querySelector('#type');
-  var room = adForm.querySelector('#room_number');
-  var capacity = adForm.querySelector('#capacity');
-  var submit = adForm.querySelector('.form__submit');
-  var reset = adForm.querySelector('.form__reset');
-  var address = adForm.querySelector('#address');
-  var allInputs = adForm.querySelectorAll('input');
-
-  adForm.setAttribute('action', 'https://js.dump.academy/keksobooking');
+  window.elements.mapForm.setAttribute('action', 'https://js.dump.academy/keksobooking');
 
   function checkCorrectData() {
     address.setAttribute('readOnly', '');
@@ -69,10 +68,9 @@
       }
     });
 
-    var minLength = 30;
     title.addEventListener('input', function (evt) {
       var target = evt.target;
-      if (target.value.length < minLength) {
+      if (target.value.length < window.constants.MIN_LENGTH) {
         target.setCustomValidity('Заголовок должен состоять минимум из 30 символов');
       } else {
         target.setCustomValidity('');
@@ -94,8 +92,7 @@
   function checkPriceValidity() {
     var validity = price.validity;
     if (validity.rangeUnderflow) {
-      price.setCustomValidity('Цена должна быть не меньше '
-      + minPrice[type.options[type.selectedIndex].value] + ' руб.');
+      price.setCustomValidity('Цена должна быть не меньше ' + minPrice[type.options[type.selectedIndex].value] + ' руб.');
     } else if (validity.rangeOverflow) {
       price.setCustomValidity('Цена должна быть не больше 1 000 000 руб.');
     } else if (validity.valueMissing) {
@@ -105,36 +102,25 @@
     }
   }
 
-  var synchronizeFields = function (unchange, change, unchangeValues, changeValues, synchronize) {
-      var unchangeValueIndex = unchangeValues.indexOf(unchange.value);
-      var syncValue = changeValues[unchangeValueIndex];
-      synchronize(change, syncValue);
-    };
-
-  var timeInValues = ['12:00', '13:00', '14:00'];
-  var timeOutValues = ['12:00', '13:00', '14:00'];
-
   function onTimeInputChange(evt) {
     var firstField = evt.target === timeout ? timeout : timein;
     var secondField = evt.target === timeout ? timein : timeout;
     function syncValues(element, value) {
       element.value = value;
     }
-    synchronizeFields(firstField, secondField, timeOutValues, timeInValues, syncValues);
+    window.synchronizeFields(firstField, secondField, window.constants.TIMEOUT_VALUES, window.constants.TIMEIN_VALUES, syncValues);
   }
 
   function onPriceInputChange() {
     function syncValueWithMin(element, value) {
       element.min = value;
     }
-    synchronizeFields(type, price, values, prices, syncValueWithMin);
+    window.synchronizeFields(type, price, window.constants.TYPES, PRICES, syncValueWithMin);
     checkPriceValidity();
   }
 
-  var optionGuestsCount = 4;
-
   function onGuestInputChange() {
-    setAllOptions(optionGuestsCount);
+    setAllOptions(window.constants.OPTION_GUESTS_COUNT);
     capacityMapping[room.value].items.forEach(function (item) {
       capacity.querySelectorAll('option')[item].classList.remove('hidden');
     });
@@ -161,6 +147,15 @@
     checkBeforeSending();
     window.map.addAddress(address);
 
+    if (errorCount === 0) {
+      evt.preventDefault();
+      window.backend.save(new FormData(window.elements.mapForm), function () {
+        window.elements.mapForm.reset();
+        onResetClick();
+      }, window.pin.onLoadError);
+    }
+  }
+
   function checkBeforeSending() {
     checkForm(allInputs);
   }
@@ -179,11 +174,11 @@
 
   function onResetClick() {
     capacity.querySelectorAll('option')[2].setAttribute('selected', '');
-    price.min = minFlatPrice;
+    price.min = window.constants.MIN_FLAT_PRICE;
     hideRedBorders();
     resetImages();
-    mapPinMain.style = '';
-    map.addAddress(address);
+    window.elements.mainButton.style = '';
+    window.map.addAddress(address);
   }
 
   function hideRedBorders() {
@@ -192,9 +187,20 @@
     }
   }
 
+  function resetImages() {
+    var allImages = window.elements.photoContainer.querySelectorAll('img');
+    if (window.elements.preview.src !== 'img/muffin.png') {
+      window.elements.preview.src = 'img/muffin.png';
+    }
+    for (var i = 0; i < allImages.length; i++) {
+      window.elements.photoContainer.removeChild(allImages[i]);
+    }
+  }
+
   timein.addEventListener('change', onTimeInputChange);
   timeout.addEventListener('change', onTimeInputChange);
   type.addEventListener('change', onPriceInputChange);
+  room.addEventListener('change', onGuestInputChange);
   submit.addEventListener('click', onSubmitClick);
   reset.addEventListener('click', onResetClick);
-}
+})();
