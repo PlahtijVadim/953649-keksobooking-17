@@ -2,7 +2,7 @@
 
 (function () {
   window.constants = {
-    NUMBER_OF_SHOW_PINS: 8,
+    NUMBER_OF_SHOW_PINS: 5,
     COUNT_FEATURES: 6,
     PIN_HEIGHT: 44,
     POINTER_HEIGHT: 18,
