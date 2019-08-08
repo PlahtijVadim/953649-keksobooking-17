@@ -65,6 +65,7 @@
     window.elements.cityMap.appendChild(message);
   }
 
+window.backend.load(onLoadSuccess, onLoadError);
 
   window.pin = {
     getRandomStartElements: getRandomStartElements,
