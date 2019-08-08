@@ -4,8 +4,10 @@
   var Translation = {
     FLAT: 'Квартира',
     HOUSE: 'Дом',
-    BUNGALO: 'Бунгало'
+    BUNGALO: 'Бунгало',
+    PALACE: 'Дворец'
   };
+
   var similarMapCardTemplate = document.querySelector('template').content;
   var mapCardTemplate = similarMapCardTemplate.querySelector('article.map__card');
 
@@ -39,13 +41,13 @@
 
   function createOneAdvert(advert) {
     var advertElement = mapCardTemplate.cloneNode(true);
-    var picturesContainer = advertElement.querySelector('.popup__pictures');
+    var picturesContainer = advertElement.querySelector('.popup__avatar');
     var textElements = advertElement.querySelectorAll('p');
     var extra = picturesContainer.querySelector('li');
     addFeatures(advert, advertElement);
 
     advertElement.querySelector('h3').textContent = advert.offer.title;
-    advertElement.querySelector('small').textContent = advert.offer.address;
+    advertElement.querySelector('popup__text--address').textContent = advert.offer.address;
     advertElement.querySelector('.popup__price').textContent = advert.offer.price + ' ' + String.fromCharCode(8381) + ' / ночь';
     advertElement.querySelector('h4').textContent = Translation[advert.offer.type.toUpperCase()];
 

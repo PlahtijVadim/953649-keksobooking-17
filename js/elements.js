@@ -8,6 +8,6 @@
     mapPins: document.querySelector('.map__pins'),
     avatarContainer: document.querySelector('.ad-form-header__upload'),
     preview: document.querySelector('.ad-form-header__preview img'),
-    photoContainer: document.querySelector('.form__photo-container')
+    photoContainer: document.querySelector('.ad-form__photo-container')
   };
 })();

@@ -102,6 +102,10 @@
       }
     });
 
+    window.debounce(function () {
+      var results = setFilterProcess(selectsValues, checkboxesValues);
+      getFilteredPins(results, window.constants.NUMBER_OF_SHOW_PINS);
+    });
   }
 
   window.onFiltersChange = onFiltersChange;
