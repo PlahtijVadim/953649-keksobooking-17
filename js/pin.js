@@ -1,79 +1,13 @@
 'use strict';
 
 (function () {
-
-var values = ['flat', 'bungalo', 'house', 'palace'];
-
-function getRandomElement(array) {
-  var randomIndex = parseInt(Math.random() * array.length);
-  return array[randomIndex];
-}
-
-function getRandomInteger(begin, end) {
-  return parseInt(Math.random() * (end - begin)) + begin;
-}
-
-function makeOffer(number) {
-  return {
-    "author": {
-      "avatar": `img/avatars/user0${number}.png`
-    },
-    "offer": {
-      "type": getRandomElement(values)
-    },
-    "location": {
-      "x": getRandomInteger(0, 1200),
-      "y": getRandomInteger(130, 630)
-    }
-  };
-}
-
-var array = [];
-
-for (var i = 1; i <= 8; i++) {
-  array.push(makeOffer(i));
-}
-
-// [1,2,3,4,5,6,7,8];
-
-//создаем DOM-элементы и заполняем их
-var renderPin = function (pin) {
-  var pinElement = similarPin.cloneNode(true);
-
-  pinElement.style.left = pin.location.x + 'px';
-  pinElement.style.top = pin.location.y + 'px';
-  pinElement.querySelector('img').src = pin.author.avatar;
-  pinElement.querySelector('img').alt = 'заголовок объявления';
-
-  return pinElement;
-};
-
-var mapPins = document.querySelector('.map__pins');
-
-var similarPin = document.querySelector('#pin')
-  .content
-  .querySelector('.map__pin');
-
-window.joinAd = function (ads) {
-  var fragment = document.createDocumentFragment();
-
-  for (var i = 0; i < array.length; i++) {
-    fragment.appendChild(renderPin(array[i]));
-  };
-
-  mapPins.appendChild(fragment);
-};
-
-  // joinAd(array);
-
-  function createOnePin(array) {
+  function createOnePin(advert) {
     var advertElement = document.createElement('button');
     advertElement.setAttribute('tabindex', '0');
     advertElement.setAttribute('class', 'map__pin');
-    advertElement.setAttribute('style', 'left: ' + array.location.x + 'px; top: '
-    + (array.location.y - window.constants.PIN_HEIGHT / 2 - window.constants.POINTER_HEIGHT) + 'px;');
+    advertElement.setAttribute('style', 'left: ' + advert.location.x + 'px; top: ' + (advert.location.y - window.constants.PIN_HEIGHT / 2 - window.constants.POINTER_HEIGHT) + 'px;');
     advertElement.innerHTML = '<img width="40" height="40" draggable="false">';
-    advertElement.querySelector('img').setAttribute('src', array.author.avatar);
+    advertElement.querySelector('img').setAttribute('src', advert.author.avatar);
     return advertElement;
   }
 
@@ -92,7 +26,6 @@ window.joinAd = function (ads) {
       fragment.appendChild(createOnePin(item));
     });
     window.elements.mapPins.appendChild(fragment);
-
   }
 
   function createNumbersArray(count) {
@@ -107,8 +40,35 @@ window.joinAd = function (ads) {
     window.adverts = adverts;
   }
 
+  function onLoadError(errorMessage) {
+    var message = document.createElement('div');
+    var style = message.style;
+    style.position = 'fixed';
+    style.top = '40px';
+    style.left = '0';
+    style.right = '0';
+
+    style.zIndex = '100';
+    style.margin = '0 auto';
+    style.paddingTop = '20px';
+
+    style.textAlign = 'center';
+    style.height = '40px';
+    style.maxWidth = '600px';
+
+    style.backgroundColor = 'white';
+    style.border = '4px solid red';
+    style.borderRadius = '10px';
+    style.fontSize = '20px';
+
+    message.textContent = errorMessage;
+    window.elements.cityMap.appendChild(message);
+  }
+
+
   window.pin = {
     getRandomStartElements: getRandomStartElements,
     showMapPins: showMapPins,
+    onLoadError: onLoadError
   };
 })();

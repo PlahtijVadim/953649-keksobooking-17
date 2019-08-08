@@ -30,7 +30,6 @@
     window.elements.cityMap.classList.remove('map--faded');
     window.elements.mapForm.classList.remove('ad-form--disabled');
     activeForm();
-    window.joinAd();
     if (window.adverts) {
       window.newPins = window.pin.getRandomStartElements(window.constants.NUMBER_OF_SHOW_PINS);
       window.pin.showMapPins(window.newPins);
