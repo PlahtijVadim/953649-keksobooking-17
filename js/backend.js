@@ -22,6 +22,14 @@
           onError('Неизвестный статус: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
+    xhr.addEventListener('error', function () {
+      onError('Что-то пошло не так! Произошла ошибка соединения');
+    });
+    xhr.addEventListener('timeout', function () {
+      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+    });
+
+    xhr.timeout = window.constants.TIMEOUT;
 
     return xhr;
   }
