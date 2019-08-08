@@ -41,14 +41,14 @@
 
   function createOneAdvert(advert) {
     var advertElement = mapCardTemplate.cloneNode(true);
-    var picturesContainer = advertElement.querySelector('.popup__avatar');
+    var picturesContainer = advertElement.querySelector('.popup__photos');
     var textElements = advertElement.querySelectorAll('p');
-    var extra = picturesContainer.querySelector('li');
+    var extra = picturesContainer.querySelector('img');
     addFeatures(advert, advertElement);
 
     advertElement.querySelector('h3').textContent = advert.offer.title;
-    advertElement.querySelector('popup__text--address').textContent = advert.offer.address;
-    advertElement.querySelector('.popup__price').textContent = advert.offer.price + ' ' + String.fromCharCode(8381) + ' / ночь';
+    advertElement.querySelector('.popup__text--address').textContent = advert.offer.address;
+    advertElement.querySelector('.popup__text--price').textContent = advert.offer.price + ' ' + String.fromCharCode(8381) + ' / ночь';
     advertElement.querySelector('h4').textContent = Translation[advert.offer.type.toUpperCase()];
 
     textElements[2].textContent = advert.offer.rooms + ' комнат' + addCorrectRoomEnding(advert) + ' для ' + advert.offer.guests + ' гост' + addCorrectGuestEnding(advert);
