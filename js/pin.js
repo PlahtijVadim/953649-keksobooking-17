@@ -65,10 +65,12 @@
     window.elements.cityMap.appendChild(message);
   }
 
+  window.backend.load(onLoadSuccess, onLoadError);
 
   window.pin = {
     getRandomStartElements: getRandomStartElements,
     showMapPins: showMapPins,
-    onLoadError: onLoadError
+    onLoadError: onLoadError,
+    onLoadSuccess: onLoadSuccess
   };
 })();

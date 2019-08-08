@@ -26,6 +26,10 @@
     input.setAttribute('value', 'x: ' + left + ' y: ' + (top + window.constants.MAIN_PIN_HEIGHT / 2 + window.constants.MAIN_POINTER_HEIGHT));
   }
 
+  function onLoadSuccess(adverts) {
+    window.adverts = adverts;
+  }
+
   function openMap() {
     window.elements.cityMap.classList.remove('map--faded');
     window.elements.mapForm.classList.remove('ad-form--disabled');
